@@ -28,7 +28,7 @@ public class AccountDAO {
 	}
 
 	public void getAccountDetials(int accountId) {
-		String sql = "SELECT * FORM accounts WHERE account_id = ?";
+		String sql = "SELECT * FROM accounts WHERE account_id = ?";
 
 		try {
 			Connection con = DBConnection.getConnection();
@@ -51,7 +51,7 @@ public class AccountDAO {
 	}
 
 	public void deposit(int accountId, double amount) {
-		String sql = "UPDATE accounts SET balance = ? WHERE account_id = ?";
+		String sql = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
 
 		try {
 			Connection con = DBConnection.getConnection();
@@ -66,7 +66,10 @@ public class AccountDAO {
 					
 					ps1.setInt(1, accountId);
 					ResultSet rs = ps1.executeQuery();
-					System.out.println("Deposit Successfull available balance: "+rs.getDouble("balance"));
+					if(rs.next()) {
+						
+						System.out.println("Deposit Successfull available balance: "+rs.getDouble("balance"));
+					}
 				}
 			} else {
 				System.out.println("Account not found");

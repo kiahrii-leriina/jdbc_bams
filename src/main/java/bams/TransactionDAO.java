@@ -46,23 +46,27 @@ public class TransactionDAO {
 								.prepareStatement("SELECT * FROM accounts WHERE account_id = ?")) {
 							debitmsg.setInt(1, fromAccountId);
 							ResultSet rs = debitmsg.executeQuery();
-							System.out.println("Dear " + rs.getString("name") + " your account is debited with ₹"
-									+ amount + " available balance " + rs.getDouble("balance"));
+							if(rs.next()) {
+								System.out.println("Dear " + rs.getString("name") + " your account is debited with ₹"
+										+ amount + " available balance " + rs.getDouble("balance"));
+							}
 						}
 					}
 				}
 
 				try (PreparedStatement creditstmt = con.prepareStatement(creditsql)) {
 					creditstmt.setDouble(1, amount);
-					creditstmt.setInt(1, toAccountId);
+					creditstmt.setInt(2, toAccountId);
 					int rows = creditstmt.executeUpdate();
 					if (rows > 0) {
 						try (PreparedStatement creditmsg = con
 								.prepareStatement("SELECT * FROM accounts WHERE account_id = ?")) {
 							creditmsg.setInt(1, toAccountId);
 							ResultSet rs = creditmsg.executeQuery();
-							System.out.println("Dear " + rs.getString("name") + " you account is credited with ₹"
-									+ amount + " available balance " + rs.getDouble("balance"));
+							if(rs.next()) {
+								System.out.println("Dear " + rs.getString("name") + " you account is credited with ₹"
+										+ amount + " available balance " + rs.getDouble("balance"));
+							}
 						}
 					}
 					else {
@@ -103,8 +107,8 @@ public class TransactionDAO {
 			ps.setInt(2, accountId);
 			
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				System.out.printf("Txn ID: %d | From: %d To: %d | Amount: ₹%.2f | Date: %s/n",
+			while(rs.next()) {
+				System.out.printf("Txn ID: %d | From: %d To: %d | Amount: ₹%.2f | Date: %s %n",
 						rs.getInt("transaction_id"),
 						rs.getInt("from_account"),
 						rs.getInt("to_account"),
@@ -118,16 +122,5 @@ public class TransactionDAO {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

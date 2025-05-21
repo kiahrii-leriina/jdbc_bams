@@ -21,6 +21,7 @@ public class Main {
 			System.out.println("6. Transfer");
 			System.out.println("7. View transaction history");
 			System.out.println("8. exit");
+			System.out.println("Enter an option");
 			
 			switch(sc.nextInt()) {
 				case 1:{
@@ -88,7 +89,26 @@ public class Main {
 					System.out.println("Enter account id to transfer to ");
 					int toId = sc.nextInt();
 					System.out.println("Enter amount to transer");
-					
+					double amount = sc.nextDouble();
+					transactiondao.transferMoney(fromId, toId, amount);
+					break;
+				}
+				
+				case 7:{
+					System.out.println("Enter account Id");
+					int id = sc.nextInt();
+					transactiondao.getTransactionHistory(id);
+					break;
+				}
+				
+				case 8:{
+					System.out.println("Exiting ... Thank you for using BAMS");
+					sc.close();
+					System.exit(0);
+				}
+				
+				default:{
+					System.out.println("Invalid option, please try again ");
 				}
 			}
 		}
