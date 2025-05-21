@@ -107,13 +107,19 @@ public class TransactionDAO {
 			ps.setInt(2, accountId);
 			
 			ResultSet rs = ps.executeQuery();
+			boolean found = false;
 			while(rs.next()) {
+				found = true;
 				System.out.printf("Txn ID: %d | From: %d To: %d | Amount: ₹%.2f | Date: %s %n",
 						rs.getInt("transaction_id"),
 						rs.getInt("from_account"),
 						rs.getInt("to_account"),
 						rs.getDouble("amount"),
 						rs.getTimestamp("timestamp"));
+			}
+			
+			if(!found) {
+				System.out.println("No transaction found for this account");
 			}
 			
 			
